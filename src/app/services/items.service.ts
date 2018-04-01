@@ -20,14 +20,26 @@ export class ItemsService {
 
   private checkWin() {
 
-    this.checkX();
-    this.checkY();
+    const resX = _.groupBy(this.all_items, function(i){ return i.y; });
+
+    // tslint:disable-next-line:forin
+    for (const arr in resX) {
+      this.checkX(resX[arr]);
+    };
+
+    const resY = _.groupBy(this.all_items, function(i){ return i.x; });
+    // tslint:disable-next-line:forin
+    for (const arr in resY) {
+      this.checkY(resY[arr]);
+    };
   }
 
-  private checkX() {
+  private checkX(all_items: Array<ItemOnMap>) {
+    console.log(all_items);
+
     let sortX = [];
     let unicX = [];
-    sortX = _.map(this.all_items, function(item){ return item.x; }).sort();
+    sortX = _.map(all_items, function(item){ return item.x; }).sort();
     unicX = _.uniq(sortX);
 console.log(unicX);
     let first = 0;
@@ -47,12 +59,12 @@ console.log(unicX);
     });
   }
 
-  private checkY() {
+  private checkY(all_items: Array<ItemOnMap>) {
     let first = 0;
     let line = 0;
     let sortY = [];
     let unicY = [];
-    sortY = _.map(this.all_items, function(item){ return item.y; }).sort();
+    sortY = _.map(all_items, function(item){ return item.y; }).sort();
     unicY = _.uniq(sortY);
 
     unicY.forEach(el => {
