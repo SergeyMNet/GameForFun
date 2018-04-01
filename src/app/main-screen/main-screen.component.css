@@ -1,0 +1,8 @@
+.main{
+  margin: auto;
+  background-color: white;
+
+  overflow: auto;
+  text-align: center;
+  display: inline-flex;
+}

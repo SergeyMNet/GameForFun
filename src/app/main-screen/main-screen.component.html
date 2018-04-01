@@ -1,0 +1,14 @@
+<div class="main">
+
+  <table>
+    <td *ngFor="let x of rows">
+      <tr *ngFor="let y of cols">
+        <app-item-grid [X]="x" [Y]="y"
+          (selectItem)="selectItem(x, y)"></app-item-grid></tr>
+    </td>
+  </table>
+</div>
+<hr>
+<div>
+  <app-ctrl-grid-menu></app-ctrl-grid-menu>
+</div>
