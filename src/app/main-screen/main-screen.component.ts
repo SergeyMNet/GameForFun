@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ItemOnMap } from '../models/item-model';
 import { ItemsService } from '../services/items.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-main-screen',
@@ -16,7 +17,7 @@ export class MainScreenComponent implements OnInit {
 
   ngOnInit() {
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < environment.fieldSize; i++) {
       this.rows.push(i);
       this.cols.push(i);
     }

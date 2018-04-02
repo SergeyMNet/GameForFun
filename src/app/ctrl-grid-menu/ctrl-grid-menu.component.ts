@@ -25,4 +25,8 @@ export class CtrlGridMenuComponent implements OnInit {
   moveRight() {
     this.itemsService.moveRight();
   }
+
+  newGame() {
+    this.itemsService.newGame();
+  }
 }

@@ -1,5 +1,9 @@
 <div class="main">
-  <h4 class="center">Game for Fun</h4>
+  <h4 class="center">Game for Fun</h4>  
+  <div>
+    <span [ngClass]="{'sel': itemsService.player }" class="pl1">Player 1</span>
+    <span [ngClass]="{'sel': !itemsService.player }" class="pl2">Player 2</span>
+  </div>  
 
   <app-main-screen></app-main-screen>
 

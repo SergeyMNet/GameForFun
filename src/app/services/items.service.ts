@@ -6,28 +6,33 @@ import * as _ from 'underscore';
 @Injectable()
 export class ItemsService {
 
-  private all_items: Array<ItemOnMap> = [];
+  public player = true;
+  private all_items: Array<Array<ItemOnMap>> = [[], []];
+
   public clear_item$: Subject<boolean> = new Subject();
   public sel_item$: Subject<ItemOnMap> = new Subject();
 
   constructor() { }
 
   addItem(item: ItemOnMap) {
-    this.all_items.push(item);
+    this.player = !this.player
+    this.all_items[+this.player].push(item);
     this.sel_item$.next(item);
-    this.checkWin();
+    this.checkWin(item, +this.player);
   }
 
-  private checkWin() {
+  private checkWin(item: ItemOnMap, player: number) {
 
-    const resX = _.groupBy(this.all_items, function(i){ return i.y; });
+    const filterListY = this.all_items[player].filter(i => i.y === item.y);
+    const resX = _.groupBy(filterListY, function(i){ return i.y; });
 
     // tslint:disable-next-line:forin
     for (const arr in resX) {
       this.checkX(resX[arr]);
     };
 
-    const resY = _.groupBy(this.all_items, function(i){ return i.x; });
+    const filterListX = this.all_items[player].filter(i => i.x === item.x);
+    const resY = _.groupBy(filterListX, function(i){ return i.x; });
     // tslint:disable-next-line:forin
     for (const arr in resY) {
       this.checkY(resY[arr]);
@@ -39,9 +44,10 @@ export class ItemsService {
 
     let sortX = [];
     let unicX = [];
-    sortX = _.map(all_items, function(item){ return item.x; }).sort();
+    sortX = _.map(all_items, function(item){ return item.x; })
+      .sort(function sortNumber(a, b) { return a - b; });
     unicX = _.uniq(sortX);
-console.log(unicX);
+
     let first = 0;
     let line = 0;
     unicX.forEach(el => {
@@ -64,7 +70,8 @@ console.log(unicX);
     let line = 0;
     let sortY = [];
     let unicY = [];
-    sortY = _.map(all_items, function(item){ return item.y; }).sort();
+    sortY = _.map(all_items, function(item){ return item.y; })
+      .sort(function sortNumber(a, b) { return a - b; });
     unicY = _.uniq(sortY);
 
     unicY.forEach(el => {
@@ -82,39 +89,61 @@ console.log(unicX);
     });
   }
 
-  finish() {
-    alert('YOU ARE WIN!!!');
+  private finish() {
+    alert('Player ' + (+this.player + 1) + ' : WIN!!!');
     this.clear_item$.next(true);
-    this.all_items = [];
+    this.all_items = [[], []];
+  }
+
+  public newGame() {
+    alert('Start New Game!');
+    this.clear_item$.next(true);
+    this.all_items = [[], []];
   }
 
 
   moveUp() {
     this.clear_item$.next(true);
-    this.all_items.forEach(i => {
+    this.all_items.forEach(items =>
+    items.forEach(i => {
       i.y++;
       this.sel_item$.next(i);
-    });
+    })
+    );
   }
   moveDown() {
     this.clear_item$.next(true);
-    this.all_items.forEach(i => {
+    this.all_items.forEach(items =>
+    items.forEach(i => {
       i.y--;
       this.sel_item$.next(i);
-    });
+    }));
   }
   moveLeft() {
     this.clear_item$.next(true);
-    this.all_items.forEach(i => {
+    this.all_items.forEach(items =>
+    items.forEach(i => {
       i.x++;
       this.sel_item$.next(i);
-    });
+    }));
   }
   moveRight() {
     this.clear_item$.next(true);
-    this.all_items.forEach(i => {
+    this.all_items.forEach(items =>
+    items.forEach(i => {
       i.x--;
       this.sel_item$.next(i);
-    });
+    }));
+  }
+
+  public getPlayer (x: number, y: number): boolean {
+    let result = false;
+    this.all_items[0].forEach(i => {
+        if (x === i.x && y === i.y) {
+          result = true;
+        }
+      });
+      console.log(result);
+    return result;
   }
 }

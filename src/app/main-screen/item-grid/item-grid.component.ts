@@ -19,7 +19,7 @@ export class ItemGridComponent implements OnInit, OnDestroy {
   @Output()
     selectItem: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor(private itemsService: ItemsService) {
+  constructor(public itemsService: ItemsService) {
     this.itemsService.sel_item$.takeUntil(this.destroy$)
       .subscribe(input => {
         if (input.x === this.X && input.y === this.Y) {
